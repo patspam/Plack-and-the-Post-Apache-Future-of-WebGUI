@@ -55,22 +55,43 @@
     </div>
     
     <div class="slide">
-        <h1>The Basics: In your browser</h1>
-        <i>http://www.webgui.org/home</i>
+        <h1>HTTP</h1>
+        <ul class=incremental>
+            <li>You type in your browser: 
+                <pre>http://www.<strong>webgui.org/home</strong></pre>
+            </li>
+            <li>Your browser performs an HTTP <strong>GET</strong> request:
+                <pre>
+GET <strong>/home</strong> HTTP/1.1
+Host: <strong>www.webgui.org</strong>
+                </pre>
+            </li>
+            <li>Web Server responds with...</li>
+        </ul>
     </div>
     
     <div class="slide">
-        <h1>The Basics: Your browser</h1>
+        <h1>HTTP Response</h1>
         <ul class=incremental>
-            <li>In your browser: <i>http://www.webgui.org/home</i></li>
-            <li>HTTP Request:
-                <ul>
-                    <li>GET /home HTTP/1.1</li>
-                    <li>Host: www.webgui.org</li>
-               </ul>
+        <li>Status:
+            <pre>HTTP/1.1 <strong>200 OK</strong></pre>
+        </li>
+        <li>Headers:
+            <pre>
+Date: Fri, 27 Aug 2010 21:10:39 GMT
+Server: <strong>Apache/2.2</strong>
+Content-Type: <strong>text/html</strong>
+...
+            </pre>
+        </li>
+        <li>Body:
+<pre>
+&lt;!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"&gt;
+<strong>&lt;html&gt;
+    ...
+&lt;/html&gt;</strong>
+</pre>
             </li>
-            <li><pre><code>blah</code></pre></li>
-            <li>[point five]</li>
         </ul>
     </div>
     
