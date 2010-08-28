@@ -50,7 +50,6 @@
 
 
     <div class="slide">
-        <h1>The Basics</h1>
         <div class=single>HTTP</div>
     </div>
     
@@ -71,7 +70,7 @@ Host: <strong>www.webgui.org</strong>
     </div>
     
     <div class="slide">
-        <h1>HTTP Response</h1>
+        <h1>HTTP</h1>
         <ul class=incremental>
         <li>Status:
             <pre>HTTP/1.1 <strong>200 OK</strong></pre>
@@ -96,16 +95,523 @@ Content-Type: <strong>text/html</strong>
     </div>
     
     <div class="slide">
-        <h1>Second slide</h1>
-        <img src=img/miyagawa.jpg style="float: left; padding: 40px">
-        <ul>
-        <li>[point two]</li>
-            <li>[point three]</li>
-            <li>[point four]</li>
-            <li>[point five]</li>
+        <div class=single>Static Websites</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Dynamic Sites?</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Web Apps?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Web Apps</h1>
+        <div class=single>CGI</div>
+    </div>
+    
+    <div class="slide">
+        <h1>CGI</h1>
+        <pre>
+#!/usr/bin/perl
+print "Content-Type: text/plain\r\n\r\n";
+print "Hello World";
+    </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>CGI in more detail</h1>
+        <ul class=incremental>
+        <li>Web server runs CGI script on each web request</li>
+        <li>Request headers set as environment variables (<strong>%ENV</strong> hash in Perl)
+        <pre>
+{
+    SERVER_PROTOCOL => 'HTTP/1.1',
+    REQUEST_URI => '/home',
+    HTTP_HOST => 'www.webgui.org',
+    ...
+}
+        </pre>
+        </li>
+        <li>STDOUT returned as HTTP body</li>
+    </div>
+    
+    <div class="slide">
+        <h1>An abstraction layer</h1>
+        <div class=single>CGI.pm</div>
+    </div>
+    
+    <div class="slide">
+        <h1>CGI.pm</h1>
+        <pre>
+#!/usr/bin/perl
+<strong>use CGI;</strong>
+$q = CGI->new;
+print $q->header('text/plain');
+print "Hello World";
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Slow!</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Apache to the rescue!</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Apache</h1>
+        <div class=single>mod_perl</div>
+    </div>
+    
+    <div class="slide">
+        <h1>mod_perl</h1>
+        <pre>
+<strong>package HelloWorld</strong>;
+use strict;
+<strong>use Apache::RequestRec;
+use Apache::RequestIO;
+use Apache::Const -compile => qw(OK);</strong>
+
+sub <strong>handler</strong> {
+    my $r = shift;
+    $r->content_type('text/plain');
+    $r->print("Hello World");
+    return Apache::Const::OK;
+}
+
+1;
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Apache Configuration</h1>
+        <pre>
+<em># httpd.conf</em>
+&lt;Location /webapp&gt;
+      SetHandler perl-script
+      PerlResponseHandler <strong>HelloWorld</strong>
+&lt;/Location&gt;
+        </pre>
+        
+        Advantages:
+        <ul class=incremental>
+        <li>Apache is very powerful: mod_rewrite, mod_expires, mod_deflate, ...</li>
+        <li>WRE bundles best-practice 2-tiered mod_perl / mod_proxy configuration</li>
         </ul>
     </div>
+    
+    <div class="slide">
+        <div class=single>Goodbye shared hosting</div>
+    </div>
+    
+    <div class=slide>
+        <h1>Back then I said..</h1>
+        
+        <blockquote>
+            My pet bugbear with WebGUI is the hurdles it places in front of the do-it-yourself hobbyist 
+            web crowd, who also happen to be the people most likely to write blog articles and generate 
+            buzz around the project. 
+        </blockquote>
+        
+        <blockquote>
+            ... it's frustrating to think that so many more people could be getting excited about WebGUI 
+            if it was only easier and cheaper to deploy. 
+        </blockquote>
+        
+        <blockquote>
+            Now if someone could just figure out how we could do that..
+        </blockquote>
+        
+        <div style="text-align: right">Patrick Donelan,</div>
+        <div style="text-align: right"><em>"People Behind WebGUI"</em> interview, March 2009</div>
+        <div style="text-align: right"><sup><a href="http://www.webgui.org/webgui/campaigns/people/patrick-donelan">
+        www.webgui.org/webgui/campaigns/people/patrick-donelan
+        </a></sup></div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>CGI Mode?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>CGI Mode</h1>
+        <div class=single>Too slow (wG 5.x)</div>
+    </div>
+    
+     <div class="slide">
+        <div class=single>FastCGI?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>FastCGI</h1>
+        <pre>
+<strong>use FCGI;</strong>
 
+my $req = FCGI::Request();
+while ($req->Accept >= 0) {
+    print "Content-Type: text/plain\r\n\r\n";
+    print "Hello World";
+}
+        </pre>
+        
+        <ul class=incremental>
+        <li>WebGUI used to support both FastCGI and mod_perl</li>
+        <li>Catalyst::Engine::Apache2, ::XMPP2, ::CGI, ::HTTP, ::SCGI, ::HTTP::POE, ::HTTP::Prefork, ...</li>
+        <li>Should WebGUI support all of them?</li>
+        </ul>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Frameworks to the rescue!</div>
+    </div>
+    
+    <div class="slide">
+        <blockquote>
+            Maypole Mason Mojo Sledge Catalyst Spoon
+            PageKit AxKit Egg Gantry Continuity Solstice
+            Mojolicious Tripletail Konstrukt Reaction Jifty
+            Cyclone3 OpenInteract Squatting
+            Dancer CGI::Application Nanoa Ark Angelos
+            Noe Schenker Tatsumaki Amon
+            Apache2::WebApp Web::Simple Apache2::REST
+            SweetPea Hydrant Titanium...
+        </blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Yuck</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Miyagawa to the rescue!</h1>
+        <blockquote><img src=img/miyagawa.jpg></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Yes, that Miyagawa..</h1>
+        <blockquote><img src=img/miyagawa_modules.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>What are Web Apps?</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Input?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Input</h1>
+        <ul>
+        <li>Environment Hash<pre>
+{
+    SERVER_PROTOCOL => 'HTTP/1.1',
+    REQUEST_URI => '/home',
+    HTTP_HOST => 'www.webgui.org',
+    ...
+}
+        </pre></li>
+        </ul>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Output?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Output</h1>
+        <ol class=incremental>
+        <li>Status: <strong>200 OK</strong></li>
+        <li>Headers: <strong>Content-Type</strong>, <strong>Content-Length</strong>, etc..</li>
+        <li>Body: <strong>&lt;html&gt; ...&lt;/html&gt;</strong></li>
+        </ol>
+    </div>
+
+    <div class="slide">
+        <h1>Web Apps Revisited</h1>
+        <div class=single>Web App = Function</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Web Apps Revisited</h1>
+        <div class=single>Web request = Function call</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>What does a function look like?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Web App = Function</h1>
+        <pre>
+my $web_app = <strong>sub</strong> {
+    my <strong>$env</strong> = shift;
+    return <strong>[</strong>
+        200,                                # Status
+        [ "Content-Type" => "text/plain" ], # Headers
+        [ "Hello World" ],                  # Body
+    <strong>]</strong>;
+};
+</pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Web App = Function</h1>
+        <pre>
+my $web_app = <strong>sub</strong> {
+    my <strong>$env</strong> = shift;
+    return <strong>[</strong>
+        <strong>200,                                # Status</strong>
+        [ "Content-Type" => "text/plain" ], # Headers
+        [ "Hello World" ],                  # Body
+    <strong>]</strong>;
+};
+</pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Web App = Function</h1>
+        <pre>
+my $web_app = <strong>sub</strong> {
+    my <strong>$env</strong> = shift;
+    return <strong>[</strong>
+        200,                                # Status
+        <strong>[ "Content-Type" => "text/plain" ], # Headers</strong>
+        [ "Hello World" ],                  # Body
+    <strong>]</strong>;
+};
+</pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Web App = Function</h1>
+        <pre>
+my $web_app = <strong>sub</strong> {
+    my <strong>$env</strong> = shift;
+    return <strong>[</strong>
+        200,                                # Status
+        [ "Content-Type" => "text/plain" ], # Headers
+        <strong>[ "Hello World" ],                  # Body</strong>
+    <strong>]</strong>;
+};
+</pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Stolen from..</h1>
+        <div class=single>Python and Ruby</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Python - WSGI</h1>
+        <pre>
+def hello(environ, start_response):
+    start_response(
+    
+        "200 OK", 
+        
+        [ ('Content-Type', 'text/plain') ]
+    )
+    
+    return ["Hello World"]
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Ruby</h1>
+        <blockquote><img src=img/rack-logo.png></blockquote>
+        <pre>
+class Hello
+    def call(env)
+        return [
+            200,
+            { 'Content-Type' => 'text/plain' },
+            [ 'Hello World' ]
+        ]
+    end
+end
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Decoupling is Good</div>
+    </div>
+    
+    <div class="slide">
+        <h1>WSGI</h1>
+        <blockquote><img src=img/WSGI.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Rack</h1>
+        <blockquote><img src=img/Rack.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Perl?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>PSGI</h1>
+        <blockquote><img src=img/PSGI.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Frameworks that support PSGI</h1>
+        <blockquote>
+            Catalyst Jifty CGI::Application HTTP::Engine Dancer
+            Mason Squatting Continuity Maypole Tatsumaki Mojolicious
+            Web::Simple Angelos Ark Schenker Noe Kamui WebNano ...
+        </blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Gives you...</div>
+    </div>
+    
+    <div class="slide">
+        <h1>PSGI Servers</h1>
+        <ul class=incremental>
+        <li>Plack (CGI, FastCGI, mod_perl)</li>
+        <li>HTTP::Server::Simple::PSGI (zero dependencies)</li>
+        <li>Starman (high-performance, preforking, UNIX domain sockets, graceful restarts, dynamic worker pool configuration via signals)</li>
+        <li>Twiggy (AnyEvent based, non-blocking / asynchronous, lightweight).</li>
+        <li>Corona (coroutines / cooperative threads)</li>
+        <li>And many more: Starlet, FCGI::EV, Danga::Socket, AnyEvent::HTTPD, SCGI, AnyEvent::SCGI, POE, ...</li>
+        </ul>
+    </div>
+    
+    <div class="slide">
+        <h1>PSGI Toolkit</h1>
+        <div class=single>Plack</div>
+    </div>
+    
+    <div class="slide">
+        <h1>app.psgi</h1>
+        <pre>
+my $handler = sub {
+    return [ 200, 
+             [ "Content-Type" => "text/plain" ], 
+             [ "Hello World" ],
+    ];
+};
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Plackup</h1>
+        <pre>
+$ <strong>plackup app.psgi</strong>
+HTTP::Server::PSGI: Accepting connections at http://0:5000/
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Plackup</h1>
+        <pre>
+$ plackup <strong>--server Twiggy</strong> app.psgi
+<strong>Twiggy</strong>: Accepting connections at http://0.0.0.0:5000/
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Plackup</h1>
+        <pre>
+$ plackup <strong>--server Starman --port 8080 --reload</strong> app.psgi
+<strong>Starman</strong>: Accepting connections at http://*:<strong>8080</strong>/
+<strong>Watching ./lib a.psgi for file updates.</strong>
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Middleware</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Middleware</h1>
+        <blockquote><img src=img/middleware.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Middleware</h1>
+        <pre>
+my $app = sub {
+    my $end = shift;
+    return [ $status, $header, $body ];
+};
+
+my $middleware = sub {
+    my $end = shift;
+    
+    # do something with $env
+    my $res = $app->($env);
+    
+    # do something with $res
+    return $res;
+}
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>Middleware</h1>
+        <blockquote>
+            Debug Session Logger Runtime Static Lint
+            AccessLog ConditionalGET ErrorDocument
+            StackTrace Auth::Basic Auth::Digest ReverseProxy
+            Refresh Auth::OAuth Hippie Throttle RefererCheck 
+            Header MethodOverride LogDispatch Log4perl
+            XFramework FirePHP Expires ETag Deflater
+            ConsoleLogger CSRFBlock AutoRefresh Access XSendfile
+            RearrangeHeaders JSONP Head HTTPExceptions ...
+        </blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Builder</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Builder</h1>
+        <pre>
+my $app = sub {
+    my $end = shift;
+    return [ $status, $header, $body ];
+};
+
+use Plack::Builder;
+
+builder {
+    enable "Static", root => '/htdocs', path => qr{^/static/};
+    enable "Deflater";
+    return $app;
+}
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <h1>URLMap</h1>
+        <pre>
+my $app1 = sub { .. };
+my $app2 = sub { .. };
+
+use Plack::Builder;
+
+builder {
+    mount '/first' => $app1;
+    mount '/second' => builder {
+        enable "StackTrace";
+        $app2;
+    };
+}
+        </pre>
+    </div>
+    
+    <div class="slide">
+        <div class=single>WebGUI?</div>
+    </div>
 
 </div>
 
