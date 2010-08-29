@@ -210,20 +210,13 @@ Content-Type: <strong>text/html</strong>
     <div class="slide">
     <h1>Lincoln D. Stein to the rescue!</h1>
         <blockquote><img src=img/lincoln.jpg style="padding-top: 20px"></img></blockquote>
-        <blockquote>"mod_perl is more than CGI scripting on steroids"</blockquote>
+        <blockquote>"a whole new way to create dynamic content by utilizing the <strong>full power of the Apache web server</strong> to create stateful sessions, customized user authentication systems, smart proxies and much more"</blockquote>
     </div>
     
     <div class="slide">
     <h1>Lincoln D. Stein to the rescue!</h1>
         <blockquote><img src=img/lincoln.jpg style="padding-top: 20px"></img></blockquote>
-        <blockquote>"It is a whole new way to create dynamic content by utilizing the <strong>full power of the Apache web server</strong> to create stateful sessions, customized user authentication systems, smart proxies and much more"</blockquote>
-    </div>
-    
-    <div class="slide">
-    <h1>Lincoln D. Stein to the rescue!</h1>
-        <blockquote><img src=img/lincoln.jpg style="padding-top: 20px"></img></blockquote>
-        <blockquote>"Yet, magically, your old CGI scripts will continue to work and work very fast indeed</blockquote>
-        <blockquote>With mod_perl you <strong>give up nothing</strong> and gain so much!"</blockquote>
+        <blockquote>"With mod_perl you <strong>give up nothing</strong> and gain so much!"</blockquote>
     </div>
     
     <div class="slide">
@@ -262,11 +255,40 @@ sub <strong>handler</strong> {
     </div>
     
     <div class="slide">
+        <h1>site.modperl</h1>
+        <pre>
+&lt;VirtualHost *:8081&gt;
+    ServerName dev.localhost.localdomain
+    DocumentRoot /data/domains/dev.localhost.localdomain/public
+	
+    <strong>SetHandler perl-script
+    PerlInitHandler WebGUI
+    PerlSetVar WebguiConfig dev.localhost.localdomain.conf</strong>
+&lt;/VirtualHost&gt;
+        </pre>
+    </div>
+    
+    <div class="slide">
         <div class=single style="padding-top: 0">WebGUI<br><span style="color: red; font-size: 0.5em">\N{HEAVY BLACK HEART}</span><br>Apache</div>
     </div>
     
     <div class="slide">
         <div class=single style="padding-top: 0">WebGUI<br><span style="color: red">&#x2764;</span><br>Apache</div>
+    </div>
+    
+    <div class="slide">
+        <h1>WebGUI.pm</h1>
+        <pre>
+<div class=long><span class=incremental>sub handler {
+    </span><span class=incremental>my $request = shift;
+    $request = Apache2::Request->new($request);
+    </span><span class=incremental>my $server = Apache2::ServerUtil->server;
+	
+    </span><span class=incremental>my $config 
+        = WebGUI::Config->new($server->dir_config('WebguiRoot'), $configFile);
+    ...
+}</span></div>
+        </pre>
     </div>
     
     <div class="slide">
@@ -303,11 +325,11 @@ sub <strong>handler</strong> {
     </div>
     
     <div class="slide">
-        <div class=single>Apache Alternatives?</div>
+        <div class=single>Alternatives?</div>
     </div>
     
     <div class="slide">
-        <div class=single>CGI Mode?</div>
+        <div class=single>CGI Mode</div>
     </div>
     
     <div class="slide">
@@ -322,7 +344,7 @@ sub <strong>handler</strong> {
         <pre>
 <strong>use FCGI;</strong>
 
-my $req = FCGI::Request();
+my $req = <strong>FCGI::Request();</strong>
 while ($req->Accept >= 0) {
     print "Content-Type: text/plain\r\n\r\n";
     print "Hello World";
@@ -425,18 +447,38 @@ while ($req->Accept >= 0) {
         <h1>Web App = Function</h1>
         <pre>
 my $web_app = <span class=incremental><strong>sub</strong> {</span>
-    <span class=incremental>my <strong>$env</strong> = shift;</span>
-    <span class=incremental>return [</span>
+
+    <span class=incremental># INPUT
+    my <strong>$environment_hash</strong> = shift;</span>
+    
+    <span class=incremental># OUTPUT
+    return [</span>
         <span class=incremental>200,                                # Status</span>
         <span class=incremental>[ "Content-Type" => "text/plain" ], # Headers</span>
         <span class=incremental>[ "Hello World" ],                  # Body</span>
     <span class=incremental>];
+    
 };</span>
 </pre>
     </div>
     
     <div class="slide">
-        <h1>Stolen from..</h1>
+        <div class=single style="padding-top: 0">What does a web request look like?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Web Request</h1>
+        <pre>
+$web_app->({
+    SERVER_PROTOCOL => 'HTTP/1.1',
+    REQUEST_URI => '/home',
+    HTTP_HOST => 'www.webgui.org',
+    ...
+});</pre>
+    </div>
+    
+    <div class="slide">
+        <h1>With thanks to..</h1>
         <div class=single>Python and Ruby</div>
     </div>
     
@@ -519,6 +561,10 @@ end
         <blockquote>
             <img src=img/plackperl.png>
         </blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>1 year ago</div>
     </div>
     
     <div class="slide">
@@ -711,7 +757,7 @@ builder {</span>
     </div>
     
     <div class="slide">
-        <div class=single>Testing?</div>
+        <div class=single>Testing</div>
     </div>
     
     <div class="slide">
@@ -761,6 +807,29 @@ done_testing;</div>
     </div>
     
     <div class="slide">
+        <h1>Testing</h1>
+        <pre>
+<div class=long>use <strong>Plack::Test</strong>;
+use Test::More;
+use <strong>HTTP::Request::Common</strong>;
+<strong>$Plack::Test::Impl = "Server";</strong>
+
+my $app = sub {
+    return [ 200, [ 'Content-Type', 'text/plain' ], [ "Hello" ] ];
+};
+
+<strong>test_psgi $app</strong>, sub {
+    my $cb = shift;
+    
+    <strong>my $res = $cb->(GET "/");</strong>
+    <strong>is</strong> $res->code, 200;
+    <strong>is</strong> $res->content, "Hello";
+};
+done_testing;</div>
+        </pre>
+    </div>
+    
+    <div class="slide">
         <div class=single>WebGUI?</div>
     </div>
     
@@ -770,11 +839,44 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <div class=single>WebGUI <span style="color: blue">8</span></div>
+        <h1>June 2010</h1>
+        <blockquote><img src=img/patspam-plack-announcement.png style="padding-top: 20px"></img></blockquote>
     </div>
     
     <div class="slide">
         <div class=single style="padding-top: 0">WebGUI 8<br><span style="color: red">&#x2764;</span><br>Plack</div>
+    </div>
+    
+    <div class="slide">
+        <pre>
+&lt;VirtualHost *:80&gt;
+ PerlOptions +Parent
+ PerlSwitches -I/data/WebGUI/lib
+
+ # CGI
+ #AddHandler cgi-script cgi
+ #ScriptAlias / /data/WebGUI/etc/dev.localhost.localdomain.cgi/
+ #&lt;Directory /data/WebGUI/etc&gt;
+ #   Options +ExecCGI
+ #&lt;/Directory&gt;
+
+ # mod_perl
+ #SetHandler perl-script
+ #PerlHandler Plack::Server::Apache2
+ #PerlSetVar psgi_app /data/WebGUI/etc/dev.localhost.localdomain.psgi
+
+ # FastCGI
+ FastCgiServer /data/WebGUI/etc/dev.localhost.localdomain.fcgi
+ ScriptAlias / /data/WebGUI/etc/dev.localhost.localdomain.fcgi/
+
+ # mod_psgi
+ #&lt;Location /&gt;
+ #    SetHandler psgi
+ #    PSGIApp /data/WebGUI/etc/dev.localhost.localdomain.psgi
+ #&lt;/Location&gt;
+
+&lt;/VirtualHost&gt;
+    </pre>
     </div>
 
 </div>
