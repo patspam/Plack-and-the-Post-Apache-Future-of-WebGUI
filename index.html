@@ -195,16 +195,11 @@ Content-Type: <strong>text/html</strong>
     </div>
     
     <div class="slide">
-        <div class=single>Slow!</div>
+        <div class=single>Slow</div>
     </div>
     
     <div class="slide">
-        <div class=single>Apache to the rescue!</div>
-    </div>
-    
-    <div class="slide">
-        <h1>Apache</h1>
-        <div class=single>mod_perl</div>
+        <div class=single>Apache modperl to the rescue!</div>
     </div>
     
     <div class="slide">
@@ -281,8 +276,8 @@ sub <strong>handler</strong> {
         <pre>
 <div class=long><span class=incremental>sub handler {
     </span><span class=incremental>my $request = shift;
-    $request = Apache2::Request->new($request);
-    </span><span class=incremental>my $server = Apache2::ServerUtil->server;
+    $request = <strong>Apache2::Request</strong>->new($request);
+    </span><span class=incremental>my $server = <strong>Apache2::ServerUtil</strong>->server;
 	
     </span><span class=incremental>my $config 
         = WebGUI::Config->new($server->dir_config('WebguiRoot'), $configFile);
@@ -564,10 +559,6 @@ end
     </div>
     
     <div class="slide">
-        <div class=single>1 year ago</div>
-    </div>
-    
-    <div class="slide">
         <div class=single>What happened next?</div>
     </div>
     
@@ -602,11 +593,12 @@ end
     
     <div class="slide">
         <h1>Servers</h1>
+        Take your pick..
         <ul class=incremental>
         <li>Plack (CGI, FastCGI, mod_perl)</li>
         <li>HTTP::Server::Simple::PSGI (zero dependencies)</li>
         <li>Starman (high-performance, preforking, UNIX domain sockets, graceful restarts, dynamic worker pool configuration via signals)</li>
-        <li>Twiggy (AnyEvent based, non-blocking / asynchronous, lightweight).</li>
+        <li>Twiggy (AnyEvent based, non-blocking / asynchronous, lightweight)</li>
         <li>Corona (coroutines / cooperative threads)</li>
         <li>Starlet, FCGI::EV, Danga::Socket, AnyEvent::HTTPD, SCGI, AnyEvent::SCGI, POE, ...</li>
         </ul>
@@ -623,7 +615,7 @@ my $handler = sub {
     return [ 
         <strong>200,</strong> 
         <strong>[ "Content-Type" => "text/plain" ], </strong> 
-        <strong>[ "Hello World" ],</strong> 
+        <strong>[ "Hello World" ],</strong> # or IO::Handle-like object
     ];
 };
         </pre>
@@ -683,10 +675,10 @@ Plack::Server::Standalone: Accepting connections at http://0:5000/
     <div class="slide">
         <h1>Middleware</h1>
         <pre>
-<span class=incremental>my $app = sub {
+my $app = sub {
     my $env = shift;
     return [ $status, $header, $body ];
-};</span>
+};
 <span class=incremental>
 my $middleware = sub {
     my $env = shift;
@@ -722,11 +714,11 @@ my $middleware = sub {
     
     <div class="slide">
         <h1>Builder</h1>
-        <pre><span class=incremental>
+        <pre>
 my $app = sub {
     my $end = shift;
     return [ $status, $header, $body ];
-};</span>
+};
 <span class=incremental>
 use Plack::Builder;
 builder {
@@ -763,17 +755,17 @@ builder {</span>
     <div class="slide">
         <h1>Testing</h1>
         <pre>
-<div class=long><span class=incremental>use <strong>Plack::Test</strong>;
+<div class=long>use <strong>Plack::Test</strong>;
 use Test::More;
 use <strong>HTTP::Request</strong>;
-</span><span class=incremental>
+<span class=incremental>
 my $app = sub {
     return [ 200, [ 'Content-Type', 'text/plain' ], [ "Hello" ] ];
 };
 </span><span class=incremental>
 <strong>test_psgi $app</strong>, sub {
     my $cb = shift;</span><span class=incremental>
-    my $req = HTTP::Request->new(GET => 'http://localhost/');
+    my $req = <strong>HTTP::Request</strong>->new(GET => 'http://localhost/');
     my $res = $cb->($req);
 </span><span class=incremental>
     <strong>is</strong> $res->code, 200;</span><span class=incremental>
@@ -834,8 +826,16 @@ done_testing;</div>
     </div>
     
     <div class="slide">
+        <div class=single>October 2009</div>
+    </div>
+    
+    <div class="slide">
         <h1>October 2009</h1>
         <blockquote><img src=img/PlebGUI.png style="padding-top: 20px"></img></blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>June 2010</div>
     </div>
     
     <div class="slide">
@@ -848,37 +848,141 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <pre>
+        <div class=single style="padding-top: 0">WebGUI 8<br>runs on..</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Retro CGI Mode</h1>
+        <pre><div class=long>
 &lt;VirtualHost *:80&gt;
  PerlOptions +Parent
  PerlSwitches -I/data/WebGUI/lib
 
- # CGI
- #AddHandler cgi-script cgi
- #ScriptAlias / /data/WebGUI/etc/dev.localhost.localdomain.cgi/
- #&lt;Directory /data/WebGUI/etc&gt;
- #   Options +ExecCGI
- #&lt;/Directory&gt;
-
- # mod_perl
- #SetHandler perl-script
- #PerlHandler Plack::Server::Apache2
- #PerlSetVar psgi_app /data/WebGUI/etc/dev.localhost.localdomain.psgi
-
- # FastCGI
- FastCgiServer /data/WebGUI/etc/dev.localhost.localdomain.fcgi
- ScriptAlias / /data/WebGUI/etc/dev.localhost.localdomain.fcgi/
-
- # mod_psgi
- #&lt;Location /&gt;
- #    SetHandler psgi
- #    PSGIApp /data/WebGUI/etc/dev.localhost.localdomain.psgi
- #&lt;/Location&gt;
-
+<strong> AddHandler cgi-script cgi
+ ScriptAlias / /data/WebGUI/etc/dev.localhost.localdomain.cgi/
+ &lt;Directory /data/WebGUI/etc&gt;
+    Options +ExecCGI
+ &lt;/Directory&gt;</strong>
 &lt;/VirtualHost&gt;
-    </pre>
+        </div></pre>
     </div>
+    
+    <div class="slide">
+        <h1>Apache mod_perl (v1 and v2)</h1>
+        <pre><div class=long>
+&lt;VirtualHost *:80&gt;
+ PerlOptions +Parent
+ PerlSwitches -I/data/WebGUI/lib
 
+ <strong>SetHandler perl-script
+ PerlHandler Plack::Server::Apache2
+ PerlSetVar psgi_app /data/WebGUI/etc/dev.localhost.localdomain.psgi</strong>
+&lt;/VirtualHost&gt;
+        </div></pre>
+    </div>
+    
+    <div class="slide">
+        <h1>FastCGI</h1>
+        <pre><div class=long>
+&lt;VirtualHost *:80&gt;
+ PerlOptions +Parent
+ PerlSwitches -I/data/WebGUI/lib
+
+ <strong>FastCgiServer /data/WebGUI/etc/dev.localhost.localdomain.fcgi
+ ScriptAlias / /data/WebGUI/etc/dev.localhost.localdomain.fcgi/</strong>
+&lt;/VirtualHost&gt;
+        </div></pre>
+    </div>
+    
+    <div class="slide">
+        <h1>mod_psgi</h1>
+        <pre><div class=long>
+&lt;VirtualHost *:80&gt;
+  <strong>&lt;Location /&gt;
+     SetHandler psgi
+     PSGIApp /data/WebGUI/etc/dev.localhost.localdomain.psgi
+  &lt;/Location&gt;</strong>
+&lt;/VirtualHost&gt;
+        </div></pre>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Nginx, etc..</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Embedded Server</h1>
+        <blockquote><img src=img/padre.png></img></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Debug Panel</h1>
+        <blockquote><img src=img/debug1.png style="padding-top: 20px"></img></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Debug Panel</h1>
+        <blockquote><img src=img/debug2.png></img></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Debug Panel</h1>
+        <blockquote><img src=img/debug3.png style="padding-top: 20px"></img></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>In case you're not excited yet..</h1>
+        <ul class=incremental>
+            <li>Choose the server and configuration that suits your niche
+                <ul class=incremental>
+                    <li>Low Cost / Low Maintenance / High Performance / High Availability / ...</li>
+                    <li>Hot deployment / Multiple web apps mounted on same domain / ...</li>
+                </ul>
+            </li>
+            <li>WebGUI-specific Middleware
+                <ul class=incremental>
+                    <li>URL Handlers = Middleware</li>
+                    <li>Content Handlers = Middleware</li>
+                </ul>
+            </li>
+            <li>Every new Plack feature (Middleware, Server, ..) is a WebGUI feature
+                <ul class=incremental>
+                    <li>Equivalent replacements for Apache mod_expires, mod_rewrite, etc..</li>
+                    <li>Mongrel2</li>
+                    <li>WebSocket (Hippie)</li>
+                </ul>
+            </li>
+            <li>Streaming API</li>
+            <li>Non-blocking in WebGUI 9.x?</li>
+       </ul>
+    </div>
+    
+    <div class="slide">
+        <h1>Heroku</h1>
+        <blockquote><img src=img/heroku.png></img></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Sunaba</h1>
+        <blockquote><img src=img/dan-180x240.till style="padding-top: 20px"></img></blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Google App Engine?</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single style="padding-top: 0">Plack/PSGI<br>is only<br>1 year old</div>
+    </div>
+    
+    <div class="slide">
+        <h1>See also</h1>
+        <ul>
+            <li>http://plackperl.org</li>
+            <li>#plack IRC channel</li>
+        </ul>
+    </div>
+    
 </div>
 
 </body>
