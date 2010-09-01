@@ -47,6 +47,13 @@
         <h3>Patrick Donelan</h3>
         <h4>SDH Consulting Group</h4>
     </div>
+    
+    <div class="slide">
+        <blockquote><img src=img/test-pattern.jpg style="padding-top: 20px"></blockquote>
+    </div>
+    <div class="slide">
+        <blockquote><img src=img/NTSC-test-pattern.gif style="width: 100%"></blockquote>
+    </div>
 
     <div class="slide">
         <div class=single>Web 101</div>
@@ -559,7 +566,10 @@ end
     </div>
     
     <div class="slide">
-        <div class=single>What happened next?</div>
+        <h1>Pre Plack</h1>
+        <blockquote>
+            <img src=img/pre-plack.png>
+        </blockquote>
     </div>
     
     <div class="slide">
@@ -592,7 +602,7 @@ end
     </div>
     
     <div class="slide">
-        <div class=single style="padding-top: 0">PSGI Servers are<br>embedded Perl processes</div>
+        <div class=single style="padding-top: 0; font-size: 350%">PSGI Server<br>=<br>embedded Perl process</div>
     </div>
     
     <div class="slide">
@@ -910,7 +920,7 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <div class=single>Nginx, etc..</div>
+        <div class=single>Nginx, uWSGI, evpsgi, Feersum, etc..</div>
     </div>
     
     <div class="slide">
@@ -920,7 +930,7 @@ done_testing;</div>
     
     <div class="slide">
         <h1>Plack::Middleware::Debug Panel</h1>
-        <blockquote><img src=img/debug1.png style="padding-top: 20px"></blockquote>
+        <blockquote><img src=img/debug1.png></blockquote>
     </div>
     
     <div class="slide">
@@ -930,7 +940,42 @@ done_testing;</div>
     
     <div class="slide">
         <h1>Plack::Middleware::Debug Panel</h1>
-        <blockquote><img src=img/debug3.png style="padding-top: 20px"></blockquote>
+        <blockquote><img src=img/debug3.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Plack::Middleware::Debug Panel</h1>
+        <blockquote><img src=img/debug4.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Plack::Middleware::Debug Panel</h1>
+        <blockquote><img src=img/debug5.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Plack::Middleware::Debug Panel</h1>
+        <blockquote><img src=img/debug6.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Plack::Middleware::Debug Panel</h1>
+        <blockquote><img src=img/debug7.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Plack::Middleware::Debug Panel</h1>
+        <blockquote><img src=img/debug8.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Plack::Middleware::Debug Panel</h1>
+        <blockquote><img src=img/debug9.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Plack::Middleware::Debug Panel</h1>
+        <blockquote><img src=img/debug10.png></blockquote>
     </div>
     
     <div class="slide">
@@ -993,21 +1038,47 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <div class=single style="padding-top: 20px">WebSocket<br>
-        <span class=incremental>Web::Hippie</span>
-        </div>
+        <div class=single>WebSocket</div>
     </div>
     
     <div class="slide">
-        <div class=single>Future?</div>
+        <pre>
+builder {
+    <strong>mount</strong> '/xd-fighter' => builder {
+          <strong>enable "+Web::Hippie"</strong>;
+          ...
+    }
+}
+        </pre>
     </div>
     
     <div class="slide">
-        <div class=single>mod_perlite</div>
+        <div class=single>Demo</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Language agnostic?</div>
+    </div>
+    
+    <div class="slide">
+        <h1>Zed Shaw to the rescue!</h1>
+        <blockquote><img src=img/zed-shaw.png style="padding-top: 20px"></blockquote>
     </div>
     
     <div class="slide">
         <div class=single style="padding-top: 10px">Mongrel2<br><img src=img/mongrel2.png></div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Demo</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Future</div>
+    </div>
+    
+    <div class="slide">
+        <div class=single>mod_perlite</div>
     </div>
     
     <div class="slide">
@@ -1019,15 +1090,13 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <h1>See also</h1>
-        <ul>
-            <li>http://plackperl.org</li>
-            <li>#plack on irc.perl.org</li>
-        </ul>
-
-http://www.slideshare.net/miyagawa/psgiplack-osdctw
-http://www.slideshare.net/miyagawa/plack-at-oscon-2010
-
+        <h1>blog.plackperl.org</h1>
+        <blockquote><img src=img/blog.plackperl.org.png></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Questions?</h1>
+        <blockquote><img src=img/termite.jpg style="padding-top: 20px"></blockquote>
     </div>
     
 </div>
