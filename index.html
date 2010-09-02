@@ -51,12 +51,37 @@
     <div class="slide">
         <blockquote><img src=img/test-pattern.jpg style="padding-top: 20px"></blockquote>
     </div>
+    
     <div class="slide">
-        <blockquote><img src=img/NTSC-test-pattern.gif style="width: 100%"></blockquote>
+        <blockquote><img src=img/termite.jpg style="padding-top: 20px"></blockquote>
     </div>
-
+    
     <div class="slide">
-        <div class=single>Web 101</div>
+        <blockquote><img src=img/logie.png ></blockquote>
+    </div>
+    
+    <div class="slide">
+        <blockquote><img src=img/neighbours.jpg ></blockquote>
+    </div>
+    
+    <div class="slide">
+        <blockquote><img src=img/logie.png ></blockquote>
+    </div>
+    
+    <div class="slide">
+        <blockquote><img src=img/kuskie.png ></blockquote>
+    </div>
+    
+    <div class="slide">
+        <blockquote><img src=img/colin1.jpg ></blockquote>
+    </div>
+    
+    <div class="slide">
+        <blockquote><img src=img/colin2.jpg ></blockquote>
+    </div>
+    
+    <div class="slide">
+        <div class=single style="padding-top: 0">A Brief History<br>of<br>Perl Web Apps</div>
     </div>
 
     <div class="slide">
@@ -64,15 +89,16 @@
     </div>
     
     <div class="slide">
-        <h1>HTTP</h1>
+        <h1>HTTP Web Request</h1>
         <ul class=incremental>
             <li>You type in your browser: 
                 <pre>http://www.<strong>webgui.org/home</strong></pre>
             </li>
-            <li>Your browser performs an HTTP <strong>GET</strong> request:
+            <li>Your browser sends to the server:
                 <pre>
 GET <strong>/home</strong> HTTP/1.1
 Host: <strong>www.webgui.org</strong>
+Accept: text/html
                 </pre>
             </li>
             <li>Web Server responds with...</li>
@@ -138,7 +164,6 @@ Content-Type: <strong>text/html</strong>
     <div class="slide">
         <h1>CGI in more detail</h1>
         <ul class=incremental>
-        <li>Web server runs CGI script on each web request</li>
         <li>Request headers set as environment variables (<strong>%ENV</strong> hash in Perl)
         <pre>
 {
@@ -210,14 +235,14 @@ Content-Type: <strong>text/html</strong>
     </div>
     
     <div class="slide">
-    <h1>Lincoln D. Stein to the rescue!</h1>
-        <blockquote><img src=img/lincoln.jpg style="padding-top: 20px"></blockquote>
+    <h1>Lincoln D. Stein says..</h1>
+        <blockquote><img src=img/lincoln2.jpg style="padding-top: 20px"></blockquote>
         <blockquote>"a whole new way to create dynamic content by utilizing the <strong>full power of the Apache web server</strong> to create stateful sessions, customized user authentication systems, smart proxies and much more"</blockquote>
     </div>
     
     <div class="slide">
-    <h1>Lincoln D. Stein to the rescue!</h1>
-        <blockquote><img src=img/lincoln.jpg style="padding-top: 20px"></blockquote>
+    <h1>Lincoln D. Stein says..</h1>
+        <blockquote><img src=img/lincoln3.jpg style="padding-top: 20px"></blockquote>
         <blockquote>"With mod_perl you <strong>give up nothing</strong> and gain so much!"</blockquote>
     </div>
     
@@ -253,11 +278,12 @@ sub <strong>handler</strong> {
     </div>
     
     <div class="slide">
-        <div class=single style="padding-top: 0">WebGUI<br>bundles<br>Apache</div>
+        <div class=single style="padding-top: 0">WebGUI 7<br>bundles<br>Apache</div>
     </div>
     
     <div class="slide">
         <h1>site.modperl</h1>
+        <div class=long>
         <pre>
 &lt;VirtualHost *:8081&gt;
     ServerName dev.localhost.localdomain
@@ -267,15 +293,15 @@ sub <strong>handler</strong> {
     PerlInitHandler WebGUI
     PerlSetVar WebguiConfig dev.localhost.localdomain.conf</strong>
 &lt;/VirtualHost&gt;
-        </pre>
+        </pre></div>
     </div>
     
     <div class="slide">
-        <div class=single style="padding-top: 0">WebGUI<br><span style="color: red; font-size: 0.5em">\N{HEAVY BLACK HEART}</span><br>Apache</div>
+        <div class=single style="padding-top: 0">WebGUI 7<br><span style="color: red; font-size: 0.5em">\N{HEAVY BLACK HEART}</span><br>Apache</div>
     </div>
     
     <div class="slide">
-        <div class=single style="padding-top: 0">WebGUI<br><span style="color: red">&#x2764;</span><br>Apache</div>
+        <div class=single style="padding-top: 0">WebGUI 7<br><span style="color: red">&#x2764;</span><br>Apache</div>
     </div>
     
     <div class="slide">
@@ -335,7 +361,7 @@ sub <strong>handler</strong> {
     </div>
     
     <div class="slide">
-        <div class=single>Too slow (wG 5.x)</div>
+        <div class=single>Too slow<br>(wG 5.x)</div>
     </div>
     
     <div class="slide">
@@ -352,6 +378,10 @@ while ($req->Accept >= 0) {
     print "Hello World";
 }
         </pre>
+    </div>
+    
+    <div class="slide">
+        <div class=single>Not enough demand</div>
     </div>
     
     <div class="slide">
@@ -382,6 +412,12 @@ while ($req->Accept >= 0) {
             <li>Catalyst::Engine::HTTP::POE</li>
             <li>Catalyst::Engine::HTTP::Prefork</li>
         </ul>
+    </div>
+    
+    <div class="slide">
+        <blockquote>
+            <img src=img/pre-plack.png>
+        </blockquote>
     </div>
     
     <div class="slide">
@@ -433,15 +469,15 @@ while ($req->Accept >= 0) {
         </ol>
     </div>
 
-    <div class="slide">
-        <div class=single>Web App = Function</div>
+    <div class="slide" style="padding-top: 0">
+        <div class=single>Web App<br>=<br>Function</div>
     </div>
     
     <div class="slide" style="padding-top: 0">
         <div class=single>Web request<br>=<br> Function call</div>
     </div>
     
-    <div class="slide">
+    <div class="slide" style="padding-top: 0">
         <div class=single>What does a function look like?</div>
     </div>
     
@@ -471,17 +507,21 @@ my $web_app = <span class=incremental><strong>sub</strong> {</span>
     <div class="slide">
         <h1>Web Request</h1>
         <pre>
-$web_app->({
-    SERVER_PROTOCOL => 'HTTP/1.1',
-    REQUEST_URI => '/home',
-    HTTP_HOST => 'www.webgui.org',
-    ...
-});</pre>
+
+my $web_app = <strong>sub</strong> { ... };
+<span class=incremental>
+$web_app</span><span class=incremental><strong>->(</strong></span><span class=incremental>
+    {
+        SERVER_PROTOCOL => 'HTTP/1.1',
+        REQUEST_URI => '/home',
+        HTTP_HOST => 'www.webgui.org',
+        ...
+    }
+<strong>)</strong>;</span></pre>
     </div>
     
     <div class="slide">
-        <h1>With thanks to..</h1>
-        <div class=single>Python and Ruby</div>
+        <div class=single>Inspired by..</div>
     </div>
     
     <div class="slide">
@@ -523,25 +563,21 @@ end
     </div>
     
     <div class="slide">
-        <div class=single>What happened next?</div>
+        <div class=single>Ecosystems</div>
     </div>
     
     <div class="slide">
         <h1>WSGI</h1>
-        <blockquote>
             <img src=img/WSGI.png align=left>
-            <p class=incremental style="padding-top: 40px">Frameworks</p>
-            <p class=incremental style="padding-top: 310px">Web Servers</p>
-        </blockquote>
+            <p class=incremental style="padding-top: 10px">Frameworks</p>
+            <p class=incremental style="padding-top: 280px">Web Servers</p>
     </div>
     
     <div class="slide">
         <h1>Rack</h1>
-        <blockquote>
-            <img src=img/Rack.png align=left>
-            <p class=incremental style="padding-top: 42px">Frameworks</p>
-            <p class=incremental style="padding-top: 310px">Niche Web Servers</p>
-        </blockquote>
+            <img src=img/Rack.png align=left style="margin-left: -20px">
+            <p class=incremental style="padding-top: 12px">Frameworks</p>
+            <p class=incremental style="padding-top: 280px">Niche Web Servers</p>
     </div>
     
     <div class="slide">
@@ -550,7 +586,7 @@ end
     
     <div class="slide">
         <blockquote>
-            <img src=img/miyagawa-fighter.png>
+            <img src=img/miyagawa-fighter.png height=550>
         </blockquote>
     </div>
     
@@ -560,9 +596,7 @@ end
     
     <div class="slide">
         <h1>plackperl.org</h1>
-        <blockquote>
             <img src=img/plackperl.png>
-        </blockquote>
     </div>
     
     <div class="slide">
@@ -574,11 +608,9 @@ end
     
     <div class="slide">
         <h1>PSGI</h1>
-        <blockquote>
             <img src=img/PSGI.png align=left>
-            <p class=incremental style="padding-top: 43px">Frameworks</p>
-            <p class=incremental style="padding-top: 310px">Web Servers</p>
-        </blockquote>
+            <p class=incremental style="padding-top: 13px">Frameworks</p>
+            <p class=incremental style="padding-top: 280px">Web Servers</p>
     </div>
     
     <div class="slide">
@@ -642,7 +674,8 @@ my $handler = sub {
         <h1>Plackup</h1>
         <pre>
 $ <strong>plackup app.psgi</strong>
-HTTP::Server::PSGI: Accepting connections at http://0:5000/
+HTTP::Server::PSGI: Accepting connections at 
+http://0:5000/
         </pre>
     </div>
     
@@ -666,9 +699,11 @@ $ plackup <strong>--server Starman --port 8080 --reload</strong> app.psgi
     <div class="slide">
         <h1>Plackup</h1>
         <pre>
-$ plackup <strong>-MPlack::App::Directory -e 'Plack::App::Directory->new'</strong>
+$ plackup <strong>-MPlack::App::Directory -e \
+        'Plack::App::Directory->new'</strong>
 
-Plack::Server::Standalone: Accepting connections at http://0:5000/
+Plack::Server::Standalone: Accepting connections at 
+http://0:5000/
         </pre>
     </div>
     
@@ -924,7 +959,7 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <h1>Embedded Server</h1>
+        <h1>Padre Embedded Server</h1>
         <blockquote><img src=img/padre.png></blockquote>
     </div>
     
@@ -1005,7 +1040,7 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <h1>Every new Plack feature is a WebGUI feature</h1>
+        <h1>Every Plack feature is a wG feature</h1>
         <ul class=incremental>
             <li>Replacements for Apache mod_expires, mod_rewrite, etc..</li>
             <li>Streaming API</li>
@@ -1044,7 +1079,7 @@ done_testing;</div>
     <div class="slide">
         <pre>
 builder {
-    <strong>mount</strong> '/xd-fighter' => builder {
+    <strong>mount</strong> '/game' => builder {
           <strong>enable "+Web::Hippie"</strong>;
           ...
     }
@@ -1066,7 +1101,10 @@ builder {
     </div>
     
     <div class="slide">
-        <div class=single style="padding-top: 10px">Mongrel2<br><img src=img/mongrel2.png></div>
+        <div class=single style="padding-top: 10px">Mongrel2<br>
+        <img src=img/mongrel2.png>
+        <img src=img/ZeroMQ.gif>
+        </div>
     </div>
     
     <div class="slide">
@@ -1096,7 +1134,7 @@ builder {
     
     <div class="slide">
         <h1>Questions?</h1>
-        <blockquote><img src=img/termite.jpg style="padding-top: 20px"></blockquote>
+        <blockquote><img src=img/termite-ute.jpg style="padding-top: 50px"></blockquote>
     </div>
     
 </div>
