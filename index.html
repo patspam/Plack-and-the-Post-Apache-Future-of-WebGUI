@@ -4,14 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Plack and the Post-Apache Future of WebGUI</title>
+    <title>s/modperl/plack/</title>
     
     <!-- metadata -->
     <meta name="generator" content="S5" />
     <meta name="version" content="S5 1.1" />
-    <meta name="presdate" content="20100902" />
+    <meta name="presdate" content="20101019" />
     <meta name="author" content="Patrick Donelan" />
-    <meta name="company" content="SDH Consulting Group" />
     
     <!-- configuration parameters -->
     <meta name="defaultView" content="slideshow" />
@@ -33,8 +32,8 @@
     <div id="currentSlide"><!-- DO NOT EDIT --></div>
     <div id="header"></div>
     <div id="footer">
-        <h1>WebGUI User Conference / Madison / 2nd September 2010</h1>
-        <h2>Plack and the Post-Apache Future of WebGUI</h2>
+        <h1>NY Perl Seminar, 19th October 2010</h1>
+        <h2>s/modperl/plack/</h2>
     </div>
 </div>
 
@@ -42,10 +41,8 @@
 <div class="presentation">
 
     <div class="slide">
-        <h1>Plack</h1>
-        <h2>..and the Post-Apache Future of WebGUI</h2>
+        <h1>s/modperl/plack/</h1>
         <h3>Patrick Donelan</h3>
-        <h4>SDH Consulting Group</h4>
     </div>
     
     <div class="slide">
@@ -53,31 +50,23 @@
     </div>
     
     <div class="slide">
-        <blockquote><img src=img/termite.jpg style="padding-top: 20px"></blockquote>
+        <h1>Who Am I</h2>
+        <ul class=incremental>
+            <li>Open source developer</li>
+            <li>(from Australia)</li>
+            <li>search.cpan.org/~pdonelan</li>
+            <li>WebGUI core developer</li>
+        </ul>
     </div>
     
     <div class="slide">
-        <blockquote><img src=img/logie.png ></blockquote>
+        <h1>WebGUI</h2>
+        <blockquote><img src=img/gooey_development.jpg style="padding-top: 20px"></blockquote>
     </div>
     
     <div class="slide">
-        <blockquote><img src=img/neighbours.jpg ></blockquote>
-    </div>
-    
-    <div class="slide">
-        <blockquote><img src=img/logie.png ></blockquote>
-    </div>
-    
-    <div class="slide">
-        <blockquote><img src=img/kuskie.png ></blockquote>
-    </div>
-    
-    <div class="slide">
-        <blockquote><img src=img/colin1.jpg ></blockquote>
-    </div>
-    
-    <div class="slide">
-        <blockquote><img src=img/colin2.jpg ></blockquote>
+        <h1>This Is Not A WebGUI Talk</h2>
+        <blockquote><img src=img/gooey_design.jpg style="padding-top: 20px"></blockquote>
     </div>
     
     <div class="slide">
@@ -680,6 +669,10 @@ http://0:5000/
     </div>
     
     <div class="slide">
+        <div class=single>Demo</div>
+    </div>
+    
+    <div class="slide">
         <h1>Plackup</h1>
         <pre>
 $ plackup <strong>--server Twiggy</strong> app.psgi
@@ -870,7 +863,7 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <div class=single>WebGUI?</div>
+        <div class=single style="padding-top: 0">$webgui<br>=~<br>s/modperl/plack/</div>
     </div>
     
     <div class="slide">
@@ -880,6 +873,23 @@ done_testing;</div>
     <div class="slide">
         <h1>October 2009</h1>
         <blockquote><img src=img/PlebGUI.png style="padding-top: 20px"></blockquote>
+    </div>
+    
+    <div class="slide">
+        <h1>Fake Apache2::* using Plack::Request</h1>
+        <pre>
+# Emulate/delegate/fake Apache2::* subs
+package WebGUI::Session::Plack;
+
+sub uri         { shift->{request}->path_info }
+sub param       { shift->{request}->param(@_) }
+sub params      { shift->{request}->prameters->mixed(@_) }
+sub headers_in  { shift->{request}->headers(@_) }
+sub headers_out { shift->{headers_out} }
+sub protocol    { shift->{request}->protocol(@_) }
+sub status      { shift->{response}->status(@_) }
+sub sendfile    { $_[0]->{sendfile} = $_[1] }
+        </pre>
     </div>
     
     <div class="slide">
@@ -893,6 +903,19 @@ done_testing;</div>
     
     <div class="slide">
         <div class=single style="padding-top: 0">WebGUI 8<br><span style="color: red">&#x2764;</span><br>Plack</div>
+    </div>
+    
+    
+    <div class="slide">
+        <h1>Refactor</h1>
+        <ul class=incremental>
+            <li>Replace Apache2::Request/Response/ServerUtil with Plack::Request/Response</li>
+            <li>No longer bundle Apache</li>
+            <li>Better test suite</li>
+            <li>Streaming API</li>
+            <li>App-specific Middleware</li>
+            <li>Delete a lot of code</li>
+        </ul>
     </div>
     
     <div class="slide">
@@ -1019,37 +1042,11 @@ done_testing;</div>
     </div>
     
     <div class="slide">
-        <div class=single>Not excited yet?</div>
+        <div class=single style="padding-top: 0">Every Plack feature is a WebGUI feature</div>
     </div>
     
     <div class="slide">
-        <ul class=incremental>
-            <li>Choose the server and configuration that suits your niche
-                <ul class=incremental>
-                    <li>Low Cost / Low Maintenance / High Performance / High Availability / ...</li>
-                    <li>Hot deployment / Multiple web apps mounted on same domain / ...</li>
-                </ul>
-            </li>
-            <li>WebGUI-specific Middleware
-                <ul class=incremental>
-                    <li>URL Handlers = Middleware</li>
-                    <li>Content Handlers = Middleware</li>
-                </ul>
-            </li>
-       </ul>
-    </div>
-    
-    <div class="slide">
-        <h1>Every Plack feature is a wG feature</h1>
-        <ul class=incremental>
-            <li>Replacements for Apache mod_expires, mod_rewrite, etc..</li>
-            <li>Streaming API</li>
-            <li>Non-blocking in WebGUI 9.x?</li>
-       </ul>
-    </div>
-    
-    <div class="slide">
-        <div class=single>Still not excited yet?</div>
+        <div class=single style="padding-top: 0">Every Plack feature is a <span style="color: red">Your WebApp</span> feature</div>
     </div>
     
     <div class="slide">
@@ -1134,7 +1131,6 @@ builder {
     
     <div class="slide">
         <h1>Questions?</h1>
-        <blockquote><img src=img/termite-ute.jpg style="padding-top: 50px"></blockquote>
     </div>
     
 </div>
